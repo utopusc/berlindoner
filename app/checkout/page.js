@@ -5,6 +5,7 @@ import PageBanner from "@/components/PageBanner";
 import FoodKingLayout from "@/layouts/FoodKingLayout";
 import Link from "next/link";
 import { useContext, useState } from "react";
+import { useRouter } from "next/navigation";
 import { CartContext } from "../../context/CartContext";
 import { loadStripe } from "@stripe/stripe-js";
 import {
@@ -28,6 +29,7 @@ const CheckoutForm = () => {
   const [isProcessing, setIsProcessing] = useState(false);
   const stripe = useStripe();
   const elements = useElements();
+  const router = useRouter(); // useRouter'ı ekledik
 
   const handleInputChange = (e) => {
     setBillingDetails({ ...billingDetails, [e.target.name]: e.target.value });
@@ -43,11 +45,11 @@ const CheckoutForm = () => {
     setIsProcessing(true);
 
     try {
-      // Send payment request to server
+      // Sunucuya ödeme isteği gönder
       const response = await fetch("/api/create-payment-intent", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ amount: (totalPrice + 10) * 100 }), // Adding $10 shipping
+        body: JSON.stringify({ amount: (totalPrice + 10) * 100 }), // 10$ kargo ücreti ekledik
       });
 
       const { clientSecret } = await response.json();
@@ -70,15 +72,15 @@ const CheckoutForm = () => {
       });
 
       if (result.error) {
-        // Show error to customer
+        // Hata durumunda kullanıcıya mesaj göster
         console.log(result.error.message);
         alert(`Payment failed: ${result.error.message}`);
       } else {
         if (result.paymentIntent.status === "succeeded") {
-          // Payment successful
-          alert("Your payment was successful!");
-          clearCart(); // Clear the cart
-          // Redirect the user if necessary
+          // Ödeme başarılı
+          clearCart(); // Sepeti temizle
+          // Kullanıcıyı onay sayfasına yönlendir
+          router.push("/order-confirmation");
         }
       }
     } catch (error) {
@@ -92,7 +94,7 @@ const CheckoutForm = () => {
   return (
     <form onSubmit={handleSubmit}>
       <div className="row g-4">
-        {/* Billing Address Section */}
+        {/* Billing Address Bölümü */}
         <div className="col-md-7">
           <div className="checkout-single-wrapper">
             <div className="checkout-single boxshado-single">
@@ -166,7 +168,7 @@ const CheckoutForm = () => {
                 </div>
               </div>
             </div>
-            {/* Payment Methods Section */}
+            {/* Payment Information Bölümü */}
             <div className="checkout-single checkout-single-bg">
               <h4>Payment Information</h4>
               <div className="checkout-single-form">
@@ -202,7 +204,7 @@ const CheckoutForm = () => {
             </div>
           </div>
         </div>
-        {/* Order Summary Section */}
+        {/* Sipariş Özeti Bölümü */}
         <div className="col-md-5">
           <div className="order-summary">
             <h4>Your Order</h4>
