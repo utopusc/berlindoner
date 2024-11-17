@@ -30,7 +30,7 @@ const page = () => {
               <div
                 className="single-offer-items bg-cover"
                 style={{
-                  backgroundImage: 'url("assets/img/banner/offer-bg.png")',
+                  backgroundImage: 'url("public/assets/img/banner/offer-bg.png")',
                 }}
               >
                 <div className="offer-content">
