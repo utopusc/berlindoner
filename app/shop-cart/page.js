@@ -4,17 +4,24 @@ import Cta from "@/components/Cta";
 import PageBanner from "@/components/PageBanner";
 import FoodKingLayout from "@/layouts/FoodKingLayout";
 import Link from "next/link";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { CartContext } from "../../context/CartContext";
 
 const page = () => {
   const { cartItems, removeFromCart, updateQuantity } = useContext(CartContext);
+  const [couponCode, setCouponCode] = useState("");
+  const [isCouponApplied, setIsCouponApplied] = useState(false);
+  const [discountPercentage, setDiscountPercentage] = useState(0);
 
   const calculateCartTotal = () => {
-    return cartItems.reduce(
+    const subtotal = cartItems.reduce(
       (total, item) => total + item.price * item.quantity,
       0
     );
+    if (isCouponApplied) {
+      return subtotal - (subtotal * discountPercentage) / 100;
+    }
+    return subtotal;
   };
 
   const incrementQuantity = (id) => {
@@ -33,6 +40,19 @@ const page = () => {
 
   const removeItem = (id) => {
     removeFromCart(id);
+  };
+
+  const applyCoupon = () => {
+    const validCouponCode = process.env.NEXT_PUBLIC_COUPON_CODE;
+    const discount = parseFloat(process.env.NEXT_PUBLIC_DISCOUNT_PERCENTAGE);
+
+    if (couponCode.trim().toUpperCase() === validCouponCode.toUpperCase()) {
+      setIsCouponApplied(true);
+      setDiscountPercentage(discount);
+      alert("Coupon applied successfully!");
+    } else {
+      alert("Invalid coupon code.");
+    }
   };
 
   return (
@@ -107,8 +127,7 @@ const page = () => {
                                 </td>
                                 <td className="cart-item-price">
                                   <span className="total-price">
-                                    $
-                                    {(item.price * item.quantity).toFixed(2)}
+                                    ${(item.price * item.quantity).toFixed(2)}
                                   </span>
                                 </td>
                                 <td className="cart-item-remove">
@@ -128,30 +147,31 @@ const page = () => {
                         </table>
                       </div>
                       <div className="cart-wrapper-footer">
-                        <form onSubmit={(e) => e.preventDefault()}>
+                        <form
+                          onSubmit={(e) => {
+                            e.preventDefault();
+                            applyCoupon();
+                          }}
+                        >
                           <input
                             type="text"
                             name="promo-code"
                             id="promoCode"
-                            placeholder="Promo Code"
+                            placeholder="Coupon Code"
+                            value={couponCode}
+                            onChange={(e) => setCouponCode(e.target.value)}
+                            disabled={isCouponApplied}
+                            style={{ color: "#000" }} // Ensure text color is visible
                           />
-                          <Link
-                            href="#"
-                            onClick={(e) => {
-                              e.preventDefault();
-                              // Add your promo code logic here
-                            }}
+                          <button
+                            type="submit"
                             className="theme-btn border-radius-none"
+                            disabled={isCouponApplied}
                           >
-                            Apply Code
-                          </Link>
+                            {isCouponApplied ? "Applied" : "Apply Coupon"}
+                          </button>
                         </form>
-                        <Link
-                          href="/shop-cart"
-                          className="theme-btn border-radius-none"
-                        >
-                          Update Cart
-                        </Link>
+                        {/* If not needed, you can remove the "Update Cart" button */}
                       </div>
                     </div>
                   </div>
@@ -165,8 +185,36 @@ const page = () => {
                         <ul>
                           <li>
                             <span>Subtotal</span>
-                            <span>${calculateCartTotal().toFixed(2)}</span>
+                            <span>
+                              $
+                              {cartItems
+                                .reduce(
+                                  (total, item) =>
+                                    total + item.price * item.quantity,
+                                  0
+                                )
+                                .toFixed(2)}
+                            </span>
                           </li>
+                          {isCouponApplied && (
+                            <li>
+                              <span>
+                                Discount ({discountPercentage}%)
+                              </span>
+                              <span>
+                                -$
+                                {(
+                                  (cartItems.reduce(
+                                    (total, item) =>
+                                      total + item.price * item.quantity,
+                                    0
+                                  ) *
+                                    discountPercentage) /
+                                  100
+                                ).toFixed(2)}
+                              </span>
+                            </li>
+                          )}
                           <li>
                             <span>Shipping</span>
                             <span>

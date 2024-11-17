@@ -15,10 +15,19 @@ import {
   useElements,
 } from "@stripe/react-stripe-js";
 
-const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY);
+const stripePromise = loadStripe(
+  process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY
+);
 
 const CheckoutForm = () => {
-  const { cartItems, totalPrice, clearCart } = useContext(CartContext);
+  const {
+    cartItems,
+    clearCart,
+    isCouponApplied,
+    discountPercentage,
+    calculateTotalPrice,
+    totalPrice, // Total price before discount
+  } = useContext(CartContext);
   const [billingDetails, setBillingDetails] = useState({
     firstName: "",
     lastName: "",
@@ -29,7 +38,7 @@ const CheckoutForm = () => {
   const [isProcessing, setIsProcessing] = useState(false);
   const stripe = useStripe();
   const elements = useElements();
-  const router = useRouter(); // useRouter'ı ekledik
+  const router = useRouter(); // Added useRouter
 
   const handleInputChange = (e) => {
     setBillingDetails({ ...billingDetails, [e.target.name]: e.target.value });
@@ -45,11 +54,14 @@ const CheckoutForm = () => {
     setIsProcessing(true);
 
     try {
-      // Sunucuya ödeme isteği gönder
+      // Calculate total amount in cents (including discount and shipping)
+      const totalAmount = (calculateTotalPrice() + 10) * 100; // Added $10 shipping fee
+
+      // Send payment request to server
       const response = await fetch("/api/create-payment-intent", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ amount: (totalPrice + 10) * 100 }), // 10$ kargo ücreti ekledik
+        body: JSON.stringify({ amount: totalAmount }),
       });
 
       const { clientSecret } = await response.json();
@@ -72,14 +84,14 @@ const CheckoutForm = () => {
       });
 
       if (result.error) {
-        // Hata durumunda kullanıcıya mesaj göster
+        // Show error to customer
         console.log(result.error.message);
         alert(`Payment failed: ${result.error.message}`);
       } else {
         if (result.paymentIntent.status === "succeeded") {
-          // Ödeme başarılı
-          clearCart(); // Sepeti temizle
-          // Kullanıcıyı onay sayfasına yönlendir
+          // Payment successful
+          clearCart(); // Clear cart (coupon info will also be cleared)
+          // Redirect the user to the confirmation page
           router.push("/order-confirmation");
         }
       }
@@ -94,7 +106,7 @@ const CheckoutForm = () => {
   return (
     <form onSubmit={handleSubmit}>
       <div className="row g-4">
-        {/* Billing Address Bölümü */}
+        {/* Billing Address Section */}
         <div className="col-md-7">
           <div className="checkout-single-wrapper">
             <div className="checkout-single boxshado-single">
@@ -134,7 +146,7 @@ const CheckoutForm = () => {
                         name="email"
                         id="userEmail"
                         required
-                        placeholder="Your Email"
+                        placeholder="Email"
                         value={billingDetails.email}
                         onChange={handleInputChange}
                       />
@@ -168,7 +180,7 @@ const CheckoutForm = () => {
                 </div>
               </div>
             </div>
-            {/* Payment Information Bölümü */}
+            {/* Payment Information Section */}
             <div className="checkout-single checkout-single-bg">
               <h4>Payment Information</h4>
               <div className="checkout-single-form">
@@ -204,7 +216,7 @@ const CheckoutForm = () => {
             </div>
           </div>
         </div>
-        {/* Sipariş Özeti Bölümü */}
+        {/* Order Summary Section */}
         <div className="col-md-5">
           <div className="order-summary">
             <h4>Your Order</h4>
@@ -228,6 +240,14 @@ const CheckoutForm = () => {
                 <span>Subtotal</span>
                 <span>${totalPrice.toFixed(2)}</span>
               </div>
+              {isCouponApplied && (
+                <div className="d-flex justify-content-between">
+                  <span>Discount ({discountPercentage}%)</span>
+                  <span>
+                    -${((totalPrice * discountPercentage) / 100).toFixed(2)}
+                  </span>
+                </div>
+              )}
               <div className="d-flex justify-content-between">
                 <span>Shipping</span>
                 <span>$10.00</span>
@@ -235,7 +255,7 @@ const CheckoutForm = () => {
               <hr />
               <div className="d-flex justify-content-between">
                 <strong>Total</strong>
-                <strong>${(totalPrice + 10).toFixed(2)}</strong>
+                <strong>${(calculateTotalPrice() + 10).toFixed(2)}</strong>
               </div>
             </div>
           </div>

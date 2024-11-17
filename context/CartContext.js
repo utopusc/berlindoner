@@ -8,18 +8,48 @@ export const CartProvider = ({ children }) => {
   // Sepet verilerini `localStorage`'dan okumak için başlangıç değerini ayarlıyoruz
   const [cartItems, setCartItems] = useState([]);
 
+  // Kupon kodu ve indirim durumu için state değişkenleri
+  const [couponCode, setCouponCode] = useState("");
+  const [isCouponApplied, setIsCouponApplied] = useState(false);
+  const [discountPercentage, setDiscountPercentage] = useState(0);
+
   // Uygulama ilk yüklendiğinde `localStorage`'dan verileri okuyalım
   useEffect(() => {
     const storedCartItems = localStorage.getItem("cartItems");
+    const storedCouponCode = localStorage.getItem("couponCode");
+    const storedIsCouponApplied = localStorage.getItem("isCouponApplied");
+    const storedDiscountPercentage = localStorage.getItem("discountPercentage");
+
     if (storedCartItems) {
       setCartItems(JSON.parse(storedCartItems));
     }
+    if (storedCouponCode) {
+      setCouponCode(storedCouponCode);
+    }
+    if (storedIsCouponApplied) {
+      setIsCouponApplied(JSON.parse(storedIsCouponApplied));
+    }
+    if (storedDiscountPercentage) {
+      setDiscountPercentage(parseFloat(storedDiscountPercentage));
+    }
   }, []);
 
-  // Sepet verileri her değiştiğinde `localStorage`'a kaydedelim
+  // Sepet verileri ve kupon bilgileri her değiştiğinde `localStorage`'a kaydedelim
   useEffect(() => {
     localStorage.setItem("cartItems", JSON.stringify(cartItems));
   }, [cartItems]);
+
+  useEffect(() => {
+    localStorage.setItem("couponCode", couponCode);
+  }, [couponCode]);
+
+  useEffect(() => {
+    localStorage.setItem("isCouponApplied", JSON.stringify(isCouponApplied));
+  }, [isCouponApplied]);
+
+  useEffect(() => {
+    localStorage.setItem("discountPercentage", discountPercentage.toString());
+  }, [discountPercentage]);
 
   // Ürün ekleme fonksiyonu
   const addToCart = (product) => {
@@ -58,9 +88,36 @@ export const CartProvider = ({ children }) => {
   // Sepeti temizleme fonksiyonu
   const clearCart = () => {
     setCartItems([]);
+    clearCoupon(); // Kupon bilgisini de temizle
   };
 
-  // Toplam fiyat hesaplama
+  // Kupon uygulama fonksiyonu
+  const applyCoupon = (code, discount) => {
+    setCouponCode(code);
+    setDiscountPercentage(discount);
+    setIsCouponApplied(true);
+  };
+
+  // Kuponu temizleme fonksiyonu
+  const clearCoupon = () => {
+    setCouponCode("");
+    setDiscountPercentage(0);
+    setIsCouponApplied(false);
+  };
+
+  // Toplam fiyat hesaplama fonksiyonu (indirimli)
+  const calculateTotalPrice = () => {
+    const subtotal = cartItems.reduce(
+      (total, item) => total + item.price * item.quantity,
+      0
+    );
+    if (isCouponApplied) {
+      return subtotal - (subtotal * discountPercentage) / 100;
+    }
+    return subtotal;
+  };
+
+  // Toplam fiyat (indirim öncesi)
   const totalPrice = cartItems.reduce(
     (total, item) => total + item.price * item.quantity,
     0
@@ -73,8 +130,15 @@ export const CartProvider = ({ children }) => {
         addToCart,
         removeFromCart,
         updateQuantity,
-        clearCart, // clearCart fonksiyonunu buraya ekledik
+        clearCart,
         totalPrice,
+        // Kupon ile ilgili değerler ve fonksiyonlar
+        couponCode,
+        isCouponApplied,
+        discountPercentage,
+        applyCoupon,
+        clearCoupon,
+        calculateTotalPrice,
       }}
     >
       {children}
