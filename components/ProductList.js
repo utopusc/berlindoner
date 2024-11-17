@@ -7,13 +7,13 @@ const products = [
   {
     id: 1,
     name: "Grilled Chicken",
-    price: 168,
+    price: 15,
     image: "assets/img/shop-food/s2.png",
   },
   {
     id: 2,
     name: "Burger",
-    price: 120,
+    price: 20,
     image: "assets/img/shop-food/s3.png",
   },
   // Diğer ürünler...

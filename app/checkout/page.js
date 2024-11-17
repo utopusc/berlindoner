@@ -39,6 +39,7 @@ const CheckoutForm = () => {
     address: "",
   });
   const [couponInput, setCouponInput] = useState("");
+  const [couponMessage, setCouponMessage] = useState(""); // Added state for coupon messages
   const [isProcessing, setIsProcessing] = useState(false);
   const stripe = useStripe();
   const elements = useElements();
@@ -54,9 +55,9 @@ const CheckoutForm = () => {
 
     if (couponInput.trim().toUpperCase() === validCouponCode.toUpperCase()) {
       applyCoupon(validCouponCode, discount);
-      alert("Coupon applied successfully!");
+      setCouponMessage("Coupon applied successfully!");
     } else {
-      alert("Invalid coupon code.");
+      setCouponMessage("Invalid coupon code.");
     }
   };
 
@@ -195,35 +196,59 @@ const CheckoutForm = () => {
                   </div>
                   {/* Coupon Code Section */}
                   <div className="col-lg-12">
-                    <div className="input-single">
-                      <label htmlFor="promoCode">Coupon Code</label>
+                    <div
+                      className="input-single"
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        marginBottom: "10px",
+                      }}
+                    >
                       <input
                         type="text"
                         name="promo-code"
                         id="promoCode"
-                        placeholder="Enter Coupon Code"
+                        placeholder="Coupon Code"
                         value={couponInput}
                         onChange={(e) => setCouponInput(e.target.value)}
                         disabled={isCouponApplied}
-                        style={{ color: "#000" }} // Ensure text color is visible
+                        style={{
+                          color: "#000",
+                          flex: 1,
+                          marginRight: "10px",
+                        }}
                       />
-                    </div>
-                    <button
-                      type="button"
-                      className="theme-btn border-radius-none"
-                      onClick={handleApplyCoupon}
-                      disabled={isCouponApplied}
-                    >
-                      {isCouponApplied ? "Applied" : "Apply Coupon"}
-                    </button>
-                    {isCouponApplied && (
                       <button
                         type="button"
-                        className="theme-btn border-radius-none ml-2"
-                        onClick={clearCoupon}
+                        onClick={handleApplyCoupon}
+                        disabled={isCouponApplied}
+                        style={{ padding: "8px 16px" }}
                       >
-                        Remove Coupon
+                        {isCouponApplied ? "Applied" : "Apply"}
                       </button>
+                      {isCouponApplied && (
+                        <button
+                          type="button"
+                          onClick={() => {
+                            clearCoupon();
+                            setCouponMessage("");
+                            setCouponInput("");
+                          }}
+                          style={{ padding: "8px 16px", marginLeft: "10px" }}
+                        >
+                          Remove
+                        </button>
+                      )}
+                    </div>
+                    {couponMessage && (
+                      <div
+                        style={{
+                          color: isCouponApplied ? "green" : "red",
+                          marginTop: "5px",
+                        }}
+                      >
+                        {couponMessage}
+                      </div>
                     )}
                   </div>
                 </div>

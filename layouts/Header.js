@@ -252,7 +252,6 @@ const Header1 = () => {
               <li key={item.id}>
                 <img src={item.image} alt={item.name} />
                 <div className="cart-product">
-                  <Link href={`/product/${item.id}`}>{item.name}</Link>
                   <span>
                     {item.price} $ x {item.quantity}
                   </span>
