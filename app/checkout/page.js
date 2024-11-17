@@ -23,8 +23,11 @@ const CheckoutForm = () => {
   const {
     cartItems,
     clearCart,
+    couponCode,
     isCouponApplied,
     discountPercentage,
+    applyCoupon,
+    clearCoupon,
     calculateTotalPrice,
     totalPrice, // Total price before discount
   } = useContext(CartContext);
@@ -35,6 +38,7 @@ const CheckoutForm = () => {
     phone: "",
     address: "",
   });
+  const [couponInput, setCouponInput] = useState("");
   const [isProcessing, setIsProcessing] = useState(false);
   const stripe = useStripe();
   const elements = useElements();
@@ -42,6 +46,18 @@ const CheckoutForm = () => {
 
   const handleInputChange = (e) => {
     setBillingDetails({ ...billingDetails, [e.target.name]: e.target.value });
+  };
+
+  const handleApplyCoupon = () => {
+    const validCouponCode = process.env.NEXT_PUBLIC_COUPON_CODE;
+    const discount = parseFloat(process.env.NEXT_PUBLIC_DISCOUNT_PERCENTAGE);
+
+    if (couponInput.trim().toUpperCase() === validCouponCode.toUpperCase()) {
+      applyCoupon(validCouponCode, discount);
+      alert("Coupon applied successfully!");
+    } else {
+      alert("Invalid coupon code.");
+    }
   };
 
   const handleSubmit = async (event) => {
@@ -176,6 +192,39 @@ const CheckoutForm = () => {
                         onChange={handleInputChange}
                       />
                     </div>
+                  </div>
+                  {/* Coupon Code Section */}
+                  <div className="col-lg-12">
+                    <div className="input-single">
+                      <label htmlFor="promoCode">Coupon Code</label>
+                      <input
+                        type="text"
+                        name="promo-code"
+                        id="promoCode"
+                        placeholder="Enter Coupon Code"
+                        value={couponInput}
+                        onChange={(e) => setCouponInput(e.target.value)}
+                        disabled={isCouponApplied}
+                        style={{ color: "#000" }} // Ensure text color is visible
+                      />
+                    </div>
+                    <button
+                      type="button"
+                      className="theme-btn border-radius-none"
+                      onClick={handleApplyCoupon}
+                      disabled={isCouponApplied}
+                    >
+                      {isCouponApplied ? "Applied" : "Apply Coupon"}
+                    </button>
+                    {isCouponApplied && (
+                      <button
+                        type="button"
+                        className="theme-btn border-radius-none ml-2"
+                        onClick={clearCoupon}
+                      >
+                        Remove Coupon
+                      </button>
+                    )}
                   </div>
                 </div>
               </div>
