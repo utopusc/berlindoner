@@ -55,6 +55,11 @@ export const CartProvider = ({ children }) => {
     );
   };
 
+  // Sepeti temizleme fonksiyonu
+  const clearCart = () => {
+    setCartItems([]);
+  };
+
   // Toplam fiyat hesaplama
   const totalPrice = cartItems.reduce(
     (total, item) => total + item.price * item.quantity,
@@ -68,6 +73,7 @@ export const CartProvider = ({ children }) => {
         addToCart,
         removeFromCart,
         updateQuantity,
+        clearCart, // clearCart fonksiyonunu buraya ekledik
         totalPrice,
       }}
     >
