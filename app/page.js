@@ -36,7 +36,7 @@ const page = () => {
                 <div className="offer-content">
                   <h5>crispy, every bite taste</h5>
                   <h3>
-                    UBER <br />
+                    Test <br />
                     DELICIOUS
                   </h3>
                 </div>
