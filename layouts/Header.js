@@ -20,162 +20,25 @@ export default Header;
 const Menus = () => {
   return (
     <ul>
-      <li className="has-dropdown active">
+      <li>
         <Link href="/">
-          Home Page
-          <i className="fas fa-angle-down" />
+          HOME
         </Link>
-        <ul className="submenu has-homemenu">
-          <li className="border-none">
-            <div className="row g-4">
-              <div className="col-lg-4 homemenu">
-                <div className="homemenu-thumb">
-                  <img src="assets/img/header/home-1.jpg" alt="img" />
-                  <div className="demo-button">
-                    <Link href="/" className="theme-btn">
-                      View Demo
-                    </Link>
-                  </div>
-                </div>
-                <div className="homemenu-content text-center">
-                  <h4 className="homemenu-title">
-                    <Link href="/">Home 01</Link>
-                  </h4>
-                </div>
-              </div>
-              <div className="col-lg-4  homemenu">
-                <div className="homemenu-thumb mb-15">
-                  <img src="assets/img/header/home-2.jpg" alt="img" />
-                  <div className="demo-button">
-                    <Link href="index-2" className="theme-btn">
-                      View Demo
-                    </Link>
-                  </div>
-                </div>
-                <div className="homemenu-content text-center">
-                  <h4 className="homemenu-title">
-                    <Link href="index-2">Home 02</Link>
-                  </h4>
-                </div>
-              </div>
-              <div className="col-lg-4 homemenu">
-                <div className="homemenu-thumb mb-15">
-                  <img src="assets/img/header/home-3.jpg" alt="img" />
-                  <div className="demo-button">
-                    <Link href="index-3" className="theme-btn">
-                      View Demo
-                    </Link>
-                  </div>
-                </div>
-                <div className="homemenu-content text-center">
-                  <h4 className="homemenu-title">
-                    <Link href="index-3">Home 03</Link>
-                  </h4>
-                </div>
-              </div>
-            </div>
-          </li>
-        </ul>
-      </li>
-      <li className="has-dropdown">
-        <Link href="shop">
-          Shop
-          <i className="fas fa-angle-down" />
-        </Link>
-        <ul className="submenu">
-          <li>
-            <Link href="shop">Shop Grid</Link>
-          </li>
-          <li>
-            <Link href="shop-list">Shop List</Link>
-          </li>
-          <li>
-            <Link href="shop-left-sidebar">Shop Left SideBar</Link>
-          </li>
-          <li>
-            <Link href="shop-right-sidebar">Shop Right SideBar</Link>
-          </li>
-          <li>
-            <Link href="shop-single">Shop Single</Link>
-          </li>
-          <li>
-            <Link href="shop-cart">Shop Cart</Link>
-          </li>
-          <li>
-            <Link href="checkout">checkout</Link>
-          </li>
-        </ul>
       </li>
       <li>
-        <Link href="news">
-          Blog
-          <i className="fas fa-angle-down" />
-        </Link>
-        <ul className="submenu">
-          <li>
-            <Link href="news">Blog</Link>
-          </li>
-          <li>
-            <Link href="news-details">Blog Details</Link>
-          </li>
-        </ul>
-      </li>
-      <li className="has-dropdown">
-        <Link href="news">
-          Pages
-          <i className="fas fa-angle-down" />
-        </Link>
-        <ul className="submenu">
-          <li>
-            <Link href="about">About Us</Link>
-          </li>
-          <li className="has-dropdown">
-            <Link href="team">
-              Chef Page
-              <i className="fas fa-angle-down" />
-            </Link>
-            <ul className="submenu">
-              <li>
-                <Link href="team">Chef</Link>
-              </li>
-              <li>
-                <Link href="team-details">Chef Details</Link>
-              </li>
-            </ul>
-          </li>
-          <li className="has-dropdown">
-            <Link href="food-menu">
-              Food Menu
-              <i className="fas fa-angle-down" />
-            </Link>
-            <ul className="submenu">
-              <li>
-                <Link href="food-menu">Food Menu 01</Link>
-              </li>
-              <li>
-                <Link href="food-menu-2">Food Menu 02</Link>
-              </li>
-            </ul>
-          </li>
-          <li>
-            <Link href="gallery">Gallery</Link>
-          </li>
-          <li>
-            <Link href="testimonial">testimonial</Link>
-          </li>
-          <li>
-            <Link href="reservation">Reservation</Link>
-          </li>
-          <li>
-            <Link href="faq">Faq's</Link>
-          </li>
-          <li>
-            <Link href="404">404 Page</Link>
-          </li>
-        </ul>
+          <Link href="about">About Us</Link>
       </li>
       <li>
-        <Link href="contact">Contact</Link>
+          <Link href="gallery">Gallery</Link>
+      </li>
+      <li>
+          <Link href="food-menu">Food Menu</Link>
+      </li>
+      <li>
+          <Link href="testimonial">testimonial</Link>
+      </li>
+      <li>
+          <Link href="reservation">Reservation</Link>
       </li>
     </ul>
   );
@@ -187,51 +50,13 @@ const Header1 = () => {
   return (
     <Fragment>
       <header className="section-bg">
-        <div className="header-top">
-          <div className="container">
-            <div className="header-top-wrapper">
-              <ul>
-                <li>
-                  <span>100%</span> Secure delivery without contacting the
-                  courier
-                </li>
-                <li>
-                  <i className="fas fa-truck" />
-                  Track Your Order
-                </li>
-              </ul>
-              <div className="top-right">
-                <div className="search-wrp">
-                  <button>
-                    <i className="far fa-search" />
-                  </button>
-                  <input placeholder="Search" aria-label="Search" />
-                </div>
-                <div className="social-icon d-flex align-items-center">
-                  <a href="#">
-                    <i className="fab fa-facebook-f" />
-                  </a>
-                  <a href="#">
-                    <i className="fab fa-twitter" />
-                  </a>
-                  <a href="#">
-                    <i className="fab fa-vimeo-v" />
-                  </a>
-                  <a href="#">
-                    <i className="fab fa-pinterest-p" />
-                  </a>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
         <div id="header-sticky" className="header-1">
           <div className="container">
             <div className="mega-menu-wrapper">
               <div className="header-main">
                 <div className="logo">
                   <Link href="/" className="header-logo">
-                    <img src="assets/img/logo/logo.svg" alt="logo-img" />
+                    <img src="assets/img/logo/logo.png" alt="logo-img" height={140} width={140}/> 
                   </Link>
                 </div>
                 <div className="header-left">
@@ -338,12 +163,12 @@ const Header2 = () => {
                 <div className="header-left">
                   <div className="logo">
                     <Link href="/" className="header-logo">
-                      <img src="assets/img/logo/logo-3.svg" alt="logo-img" />
+                      <img src="assets/img/logo/logo.png" alt="logo-img" height={130} width={130} />
                     </Link>
                   </div>
                   <div className="logo-2">
                     <Link href="/" className="header-logo">
-                      <img src="assets/img/logo/logo.svg" alt="logo-img" />
+                      <img src="assets/img/logo/logo.png" alt="logo-img" height={130}  width={130} />
                     </Link>
                   </div>
                 </div>
@@ -444,7 +269,7 @@ const Sidebar = ({ toggle, setToggle }) => {
               <div className="offcanvas__top mb-5 d-flex justify-content-between align-items-center">
                 <div className="offcanvas__logo">
                   <Link href="/">
-                    <img src="assets/img/logo/logo.svg" alt="logo-img" />
+                    <img src="assets/img/logo/logo.png" alt="logo-img" height={130} width={130} />
                   </Link>
                 </div>
                 <div className="offcanvas__close">

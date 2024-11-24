@@ -30,7 +30,7 @@ const Footer1 = () => {
               <div className="single-footer-widget">
                 <div className="widget-head">
                   <Link href="/">
-                    <img src="assets/img/logo/logo.svg" alt="logo-img" />
+                    <img src="assets/img/logo/logo.png" alt="logo-img" height={130} width={130}/>
                   </Link>
                 </div>
                 <div className="footer-content">
@@ -200,7 +200,7 @@ const Footer2 = () => {
               <div className="single-footer-widget pe-md-5 border-right">
                 <div className="widget-head">
                   <Link href="/">
-                    <img src="assets/img/logo/logo-2.svg" alt="logo-img" />
+                    <img src="assets/img/logo/logo.svg" alt="logo-img" height={130} width={130}/>
                   </Link>
                 </div>
                 <div className="footer-content">
