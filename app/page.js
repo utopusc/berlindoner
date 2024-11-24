@@ -163,7 +163,7 @@ const page = () => {
           <div className="section-title text-center">
             <span className="wow fadeInUp">crispy, every bite taste</span>
             <h2 className="wow fadeInUp" data-wow-delay=".3s">
-              Popular Food Items
+              Popular Food 
             </h2>
           </div>
           <div className="row">
@@ -465,7 +465,7 @@ const page = () => {
                     <span>$28.52</span>
                   </div>
                   <h4>
-                    <Link href="/shop-single">delicious burger</Link>
+                    <Link href="/shop-single">Uber Burger</Link>
                   </h4>
                   <div className="star">
                     <span className="fas fa-star" />

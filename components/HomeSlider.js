@@ -102,8 +102,8 @@ const HomeSlider = () => {
                         data-duration={duration}
                         data-delay="0.5s"
                       >
-                        delicious
-                        <span>Doner</span>
+                        DELICIOUS
+                        <span>DONER</span>
                       </h1>
                       <div className="hero-button">
                         <Link
